@@ -66,6 +66,25 @@ const AppContent = observer(() => {
         }
     }, [common, connectionStatus]);
 
+    // Fallback: if the WebSocket never opens (e.g. domain not registered with Deriv),
+    // force initialization after 8 seconds so the app can render the login screen.
+    React.useEffect(() => {
+        const timeout = setTimeout(() => {
+            setIsApiInitialized(prev => {
+                if (!prev) return true;
+                return prev;
+            });
+        }, 8000);
+        return () => clearTimeout(timeout);
+    }, []);
+
+    // Ultimate safety net: if everything else fails, force loading off after 25 seconds.
+    // This handles cases where trading_times.initialise() or similar hangs indefinitely.
+    React.useEffect(() => {
+        const t = setTimeout(() => setIsLoading(false), 25000);
+        return () => clearTimeout(t);
+    }, []);
+
     const { current_language } = common;
     const html = document.documentElement;
     React.useEffect(() => {
@@ -120,12 +139,16 @@ const AppContent = observer(() => {
     const changeActiveSymbolLoadingState = () => {
         init();
 
+        const complete = () => setIsLoading(false);
+
         const retrieveActiveSymbols = () => {
             const { active_symbols } = ApiHelpers.instance;
-
-            active_symbols.retrieveActiveSymbols(true).then(() => {
-                setIsLoading(false);
-            });
+            const symbolsPromise = active_symbols.retrieveActiveSymbols(true);
+            // Guarantee completion even if retrieveActiveSymbols hangs (no WS connection)
+            const fallbackPromise = new Promise(resolve => setTimeout(resolve, 10000));
+            Promise.race([symbolsPromise, fallbackPromise])
+                .then(complete)
+                .catch(complete);
         };
 
         if (ApiHelpers?.instance?.active_symbols) {
@@ -133,12 +156,23 @@ const AppContent = observer(() => {
         } else {
             // This is a workaround to fix the issue where the active symbols are not loaded immediately
             // when the API is initialized. Should be replaced with RxJS pubsub
+            let resolved = false;
             const intervalId = setInterval(() => {
                 if (ApiHelpers?.instance?.active_symbols) {
+                    resolved = true;
                     clearInterval(intervalId);
                     retrieveActiveSymbols();
                 }
             }, 1000);
+
+            // Fallback: if active symbols never load (e.g. WS unavailable), show the app anyway
+            setTimeout(() => {
+                if (!resolved) {
+                    resolved = true;
+                    clearInterval(intervalId);
+                    complete();
+                }
+            }, 10000);
         }
     };
 

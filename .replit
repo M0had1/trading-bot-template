@@ -43,3 +43,4 @@ publicDir = "dist"
 
 [userenv.shared]
 APP_ID = "33BeITFXk8T0IJ8CSLrkB"
+CLIENT_ID = "33BeITFXk8T0IJ8CSLrkB"

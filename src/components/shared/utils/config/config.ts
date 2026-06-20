@@ -16,10 +16,15 @@ export const STAGING_DOMAINS = {
     COM: brandConfig.platform.hostname.staging.com,
 } as const;
 
+// Numeric app_id for the classic Deriv V3 WebSocket API (works from any domain).
+// The V2 staging API (staging-api.derivws.com) requires domain registration and will
+// reject connections from development/Replit domains with 403.
+const DERIV_WS_APP_ID = process.env.DERIV_WS_APP_ID || '36300';
+
 // WebSocket server URLs
 export const WS_SERVERS = {
-    STAGING: `${brandConfig.platform.derivws.url.staging}options/ws/public`,
-    PRODUCTION: `${brandConfig.platform.derivws.url.production}options/ws/public`,
+    STAGING: `wss://ws.binaryws.com/websockets/v3?app_id=${DERIV_WS_APP_ID}`,
+    PRODUCTION: `wss://ws.binaryws.com/websockets/v3?app_id=${DERIV_WS_APP_ID}`,
 } as const;
 
 // =============================================================================

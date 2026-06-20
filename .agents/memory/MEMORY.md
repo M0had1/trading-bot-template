@@ -1,0 +1,2 @@
+- [Deriv WS URL fix](deriv-ws-url.md) — V2 staging API needs domain registration; use V3 ws.binaryws.com for dev
+- [Deriv bot template init](deriv-bot-init.md) — two-level loading flow and fallback timer pattern
