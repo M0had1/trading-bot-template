@@ -1,7 +1,6 @@
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { pluginBasicSsl } from '@rsbuild/plugin-basic-ssl';
 
 const path = require('path');
 
@@ -10,15 +9,11 @@ export default defineConfig({
         pluginSass({
             sassLoaderOptions: {
                 sourceMap: true,
-                sassOptions: {
-                    // includePaths: [path.resolve(__dirname, 'src')],
-                },
-                // additionalData: `@use "${path.resolve(__dirname, 'src/components/shared/styles')}" as *;`,
+                sassOptions: {},
             },
             exclude: /node_modules/,
         }),
         pluginReact(),
-        pluginBasicSsl(),
     ],
     source: {
         entry: {
@@ -70,14 +65,17 @@ export default defineConfig({
         template: './index.html',
     },
     server: {
-        port: 8443,
+        port: 5000,
+        host: '0.0.0.0',
         compress: true,
     },
     dev: {
         hmr: true,
+        client: {
+            host: '0.0.0.0',
+        },
     },
     performance: {
-        // Configure Rsbuild's native bundle analyzer
         bundleAnalyze:
             process.env.BUNDLE_ANALYZE === 'true'
                 ? {
