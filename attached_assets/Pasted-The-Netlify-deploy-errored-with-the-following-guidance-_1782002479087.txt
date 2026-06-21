@@ -1,0 +1,133 @@
+The Netlify deploy errored, with the following guidance provided:
+
+Diagnosis
+- Relevant log lines show the build script and the missing binary: [line 79](#L79) (build script), [line 80](#L80) (rsbuild used), and the actual error [line 81](#L81) ("rsbuild: not found"). The build then fails with a non-zero exit code [lines 82–88](#L82-L88).
+- There is also an npm internal/engine warning earlier ([lines 19–22](#L19-L22) and [lines 38–41](#L38-L41)), but those are warnings and an npm internal message — the immediate blocking error is the missing rsbuild executable.
+
+Error type and cause
+- Error type: missing build tool / command not found.
+- Cause: The package or binary "rsbuild" that the npm script runs ("rsbuild build") is not available on the build machine, so the npm script fails. This usually happens because the package is not installed (not listed in package.json / not committed) or installation of that package failed during dependency install.
+
+Solution (steps to fix)
+1. Verify whether rsbuild is declared in package.json
+   - Open your repo's package.json and check the scripts/dependencies: https://github.com/M0had1/trading-bot-template/blob/master/package.json
+   - If rsbuild is already present, make sure package.json and package-lock.json are committed and pushed.
+
+2. If rsbuild is missing, add it as a dependency (recommended: devDependency)
+   - Locally run:
+```bash
+npm install --save-dev rsbuild
+git add package.json package-lock.json
+git commit -m "chore: add rsbuild devDependency"
+git push
+```
+   - This ensures Netlify installs rsbuild and the binary becomes available at node_modules/.bin/rsbuild so the "npm run build" script can run.
+
+3. Alternative quick fix: use npx (not recommended as a long-term fix)
+   - You can change the build command to use npx so Netlify will fetch and run rsbuild at build-time without adding it as a dependency:
+     - Update netlify.toml or the build.command to: npx rsbuild build
+   - Better is to add the package to package.json so builds are reproducible.
+
+4. Validate locally before pushing
+   - Run locally: npm ci && npm run build
+   - Ensure the same command succeeds locally before pushing to Netlify.
+
+5. Optional: Address Node engine warnings if needed
+   - Your logs include an engine warning for @semantic-release/npm requiring a newer Node version ([lines 19–22](#L19-L22)). If you need to change the Node version used by Netlify, follow Netlify's docs: https://docs.netlify.com/configure-builds/manage-dependencies/#node-js-and-javascript
+
+Notes
+- The immediate blocker is "rsbuild: not found" ([lines 79–81](#L79-L81)). Adding rsbuild to package.json (devDependencies) and committing will resolve it in most cases.
+
+The relevant error logs are:
+
+Line 0: build-image version: cbbb2660d860fe70694043ec05851a3910a2bf39 (noble-new-builds)
+Line 1: buildbot version: 12b3c6f417c1b3440df5ed3246d8285499c647e3
+Line 2: Fetching cached dependencies
+Line 3: Failed to fetch cache, continuing with build
+Line 4: Starting to prepare the repo for build
+Line 5: No cached dependencies found. Cloning fresh repo
+Line 6: git clone --filter=blob:none https://github.com/M0had1/trading-bot-template
+Line 7: Preparing Git Reference refs/heads/master
+Line 8: Custom publish path detected. Proceeding with the specified path: 'dist'
+Line 9: Custom build command detected. Proceeding with the specified command: 'npm run build'
+Line 10: Installing dependencies
+Line 11: mise ~/.config/mise/config.toml tools: python@3.14.3
+Line 12: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+Line 13: mise ~/.config/mise/config.toml tools: go@1.26.2
+Line 15: Now using node v20.20.2 (npm v10.8.2)
+Line 16: Enabling Node.js Corepack
+Line 17: No npm workspaces detected
+Line 18: Installing npm packages using npm version 10.8.2
+Line 19: npm warn EBADENGINE Unsupported engine {
+Line 20: npm warn EBADENGINE   package: '@semantic-release/npm@13.1.5',
+Line 21: npm warn EBADENGINE   required: { node: '^22.14.0 || >= 24.10.0' },
+Line 22: npm warn EBADENGINE   current: { node: 'v20.20.2', npm: '10.8.2' }
+Line 23: npm warn EBADENGINE }
+Line 24: npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+Line 25: npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+npm warn deprecated abab@2.0.6: Use your
+Line 26: npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+Line 27: npm warn deprecated @babel/plugin-proposal-unicode-property-regex@7.18.6: This proposal has been merged to the ECMAScript standa
+Line 28: npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript s
+Line 29: npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and 
+Line 30: npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard an
+Line 31: npm warn deprecated @babel/plugin-proposal-object-rest-spread@7.20.7: This proposal has been merged to the ECMAScript standard a
+Line 32: npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript s
+Line 33: npm warn deprecated @babel/plugin-proposal-export-namespace-from@7.18.9: This proposal has been merged to the ECMAScript standar
+Line 34: npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and
+Line 35: npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Line 36: npm warn deprecated popper.js@1.16.1: You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy 
+Line 37: npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other 
+Line 38: npm error Exit handler never called!
+Line 39: npm error This is an error with npm itself. Please report this error at:
+Line 40: npm error   <https://github.com/npm/cli/issues>
+Line 41: npm error A complete log of this run can be found in: /opt/buildhome/.npm/_logs/2026-06-21T00_38_03_339Z-debug-0.log
+Line 42: npm packages installed
+Line 43: Successfully installed dependencies
+Line 44: Detected 0 framework(s)
+Line 45: Starting build script
+Line 46: Section completed: initializing
+Line 47: ​
+Line 48: Netlify Build                                                 
+Line 49: ────────────────────────────────────────────────────────────────
+Line 50: ​
+Line 51: ❯ Version
+Line 72: ❯ Loading extensions
+Line 73:    - neon
+Line 74: ​
+Line 75: build.command from netlify.toml                               
+Line 76: ────────────────────────────────────────────────────────────────
+Line 77: ​
+Line 78: $ npm run build
+Line 79: > trading-bot-template@0.0.1 build
+Line 80: > rsbuild build
+Line 81: sh: 1: rsbuild: not found
+Line 82: Failed during stage 'building site': Build script returned non-zero exit code: 2
+Line 83: ​
+Line 84: "build.command" failed                                        
+Line 85: ────────────────────────────────────────────────────────────────
+Line 86: ​
+Line 87:   Error message
+Line 88:   Command failed with exit code 127: npm run build
+Line 89: ​
+Line 90:   Error location
+Line 91:   In build.command from netlify.toml:
+Line 92:   npm run build
+Line 93: ​
+Line 94:   Resolved config
+Line 95:   build:
+Line 96:     command: npm run build
+Line 97:     commandOrigin: config
+Line 98:     environment:
+Line 99:       - NODE_VERSION
+Line 100:       - NPM_FLAGS
+Line 101:     publish: /opt/build/repo/dist
+Line 102:     publishOrigin: config
+Line 103:   redirects:
+Line 104:     - from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
+Line 105: Build failed due to a user error: Build script returned non-zero exit code: 2
+Line 106: Failing build: Failed to build site
+Line 107: Finished processing build request in 1m36.126s
