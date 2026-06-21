@@ -1,0 +1,139 @@
+The Netlify deploy errored, with the following guidance provided:
+
+Diagnosis
+- Relevant log lines: build started with npm run build [#L78-L80], the build script fails because the command/program rsbuild is not found [#L81]. The build command therefore exits with code 127 and Netlify reports the failure [#L83-L91].
+- There is also a Node engine warning earlier about @semantic-release/npm requiring a newer Node version than the environment provides [#L19-L22]. (This is a warning, not the immediate cause of the failure, but may need attention.)
+
+Cause
+- The package.json build script calls a CLI named rsbuild ("rsbuild build"), but that executable is not present on the build machine, so the shell cannot find it and exits with code 127 [#L81]. This happens when either:
+  - the npm package that provides the rsbuild binary is not listed in package.json or not installed, or
+  - rsbuild is a local script/binary that wasn't committed to the repo, or
+  - the build script is wrong and names a tool that you don't intend to use.
+
+Solution
+1) Inspect your repository's package.json to confirm what your "build" script is and whether rsbuild is listed as a dependency/devDependency:
+   - Open package.json in the repo: https://github.com/M0had1/trading-bot-template/blob/master/package.json
+   - Look for the "scripts.build" entry and for "rsbuild" under dependencies/devDependencies.
+
+2) If you intend to use the rsbuild npm package:
+   - Verify rsbuild is in package.json. If it is missing, add it (as a devDependency) and commit package.json and package-lock.json:
+```bash
+npm install --save-dev rsbuild
+git add package.json package-lock.json
+git commit -m "Add rsbuild as devDependency"
+git push
+```
+   - Redeploy on Netlify. Installing rsbuild ensures the binary will be available at node_modules/.bin/rsbuild and npm run build will find it.
+
+3) If rsbuild is a local script/binary (e.g., a file in the repo that provides rsbuild):
+   - Verify that file was committed. If not, add & commit it and push. Netlify needs the file present in the repo to execute it.
+
+4) If rsbuild is a typo or you intended to use another builder (vite, react-scripts, webpack, etc.):
+   - Update package.json to call the correct build command. Example change (replace with the correct tool you use):
+```json
+"scripts": {
+  "build": "vite build"
+}
+```
+   - Commit and push the change.
+
+5) Re-deploy. The immediate error should be resolved once the build script references an installed/committed executable.
+
+6) (Optional) Address the Node engine warning: @semantic-release/npm declared an engine requiring newer Node [#L19-L22]. If you need that package to run in CI, set the Node version Netlify uses (e.g., via .nvmrc or environment settings). Netlify docs for changing Node versions: https://docs.netlify.com/configure-builds/manage-dependencies/#node-js-and-javascript
+
+Notes
+- Do not rely on globally installed CLIs on your local machine; always add build tools as local dependencies or include committed scripts so they are available in Netlify's build environment.
+- After making the change, check the build logs for the successful invocation of the expected binary (e.g., node_modules/.bin/rsbuild or vite) rather than the "not found" error shown at [#L81].
+
+The relevant error logs are:
+
+Line 0: build-image version: cbbb2660d860fe70694043ec05851a3910a2bf39 (noble-new-builds)
+Line 1: buildbot version: 12b3c6f417c1b3440df5ed3246d8285499c647e3
+Line 2: Fetching cached dependencies
+Line 3: Failed to fetch cache, continuing with build
+Line 4: Starting to prepare the repo for build
+Line 5: No cached dependencies found. Cloning fresh repo
+Line 6: git clone --filter=blob:none https://github.com/M0had1/trading-bot-template
+Line 7: Preparing Git Reference refs/heads/master
+Line 8: Custom publish path detected. Proceeding with the specified path: 'dist'
+Line 9: Custom build command detected. Proceeding with the specified command: 'npm run build'
+Line 10: Installing dependencies
+Line 11: mise ~/.config/mise/config.toml tools: python@3.14.3
+Line 12: mise ~/.config/mise/config.toml tools: ruby@3.4.8
+Line 13: mise ~/.config/mise/config.toml tools: go@1.26.2
+Line 15: Now using node v20.20.2 (npm v10.8.2)
+Line 16: Enabling Node.js Corepack
+Line 17: No npm workspaces detected
+Line 18: Installing npm packages using npm version 10.8.2
+Line 19: npm warn EBADENGINE Unsupported engine {
+Line 20: npm warn EBADENGINE   package: '@semantic-release/npm@13.1.5',
+Line 21: npm warn EBADENGINE   required: { node: '^22.14.0 || >= 24.10.0' },
+Line 22: npm warn EBADENGINE   current: { node: 'v20.20.2', npm: '10.8.2' }
+Line 23: npm warn EBADENGINE }
+Line 24: npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+Line 25: npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+npm warn deprecated abab@2.0.6: Use your
+Line 26: npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+Line 27: npm warn deprecated @babel/plugin-proposal-unicode-property-regex@7.18.6: This proposal has been merged to the ECMAScript standa
+Line 28: npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript s
+Line 29: npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard an
+Line 30: npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and 
+Line 31: npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript s
+Line 32: npm warn deprecated @babel/plugin-proposal-export-namespace-from@7.18.9: This proposal has been merged to the ECMAScript standar
+Line 33: npm warn deprecated @babel/plugin-proposal-object-rest-spread@7.20.7: This proposal has been merged to the ECMAScript standard a
+Line 34: npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and
+Line 35: npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Line 36: npm warn deprecated popper.js@1.16.1: You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy 
+Line 37: npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other 
+Line 38: npm error Exit handler never called!
+Line 39: npm error This is an error with npm itself. Please report this error at:
+Line 40: npm error   <https://github.com/npm/cli/issues>
+Line 41: npm error A complete log of this run can be found in: /opt/buildhome/.npm/_logs/2026-06-21T00_33_13_509Z-debug-0.log
+Line 42: npm packages installed
+Line 43: Successfully installed dependencies
+Line 44: Detected 0 framework(s)
+Line 45: Starting build script
+Line 46: Section completed: initializing
+Line 47: ​
+Line 48: Netlify Build                                                 
+Line 49: ────────────────────────────────────────────────────────────────
+Line 50: ​
+Line 51: ❯ Version
+Line 73:    - neon
+Line 74: ​
+Line 75: build.command from netlify.toml                               
+Line 76: ────────────────────────────────────────────────────────────────
+Line 77: ​
+Line 78: $ npm run build
+Line 79: > trading-bot-template@0.0.1 build
+Line 80: > rsbuild build
+Line 81: sh: 1: rsbuild: not found
+Line 82: ​
+Line 83: "build.command" failed                                        
+Line 84: ────────────────────────────────────────────────────────────────
+Line 85: ​
+Line 86:   Error message
+Line 87:   Command failed with exit code 127: npm run build
+Line 88: ​
+Line 89:   Error location
+Line 90:   In build.command from netlify.toml:
+Line 91:   npm run build
+Line 92: ​
+Line 93:   Resolved config
+Line 94:   build:
+Line 95:     command: npm run build
+Line 96:     commandOrigin: config
+Line 97:     environment:
+Line 98:       - NODE_VERSION
+Line 99:       - NPM_FLAGS
+Line 100:     publish: /opt/build/repo/dist
+Line 101:     publishOrigin: config
+Line 102:   redirects:
+Line 103: Failed during stage 'building site': Build script returned non-zero exit code: 2
+Line 104:     - from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
+Line 105: Build failed due to a user error: Build script returned non-zero exit code: 2
+Line 106: Failing build: Failed to build site
+Line 107: Finished processing build request in 1m38.891s
