@@ -17,7 +17,7 @@
         "test": "jest",
         "coverage": "jest --coverage --coverageReporters=json-summary",
         "coverage:total": "npm run coverage && node -p \"require('./coverage/coverage-summary.json').total.lines.pct\"",
-        "prepare": "husky install",
+        "prepare": "node -e \"if (!process.env.CI) require('child_process').execSync('husky install', {stdio: 'inherit'})\"",
         "build:analyze": "BUNDLE_ANALYZE=true rsbuild build",
         "generate:brand-css": "node scripts/generate-brand-css.js",
         "type-check": "tsc --noEmit"

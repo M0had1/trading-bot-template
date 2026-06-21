@@ -1,0 +1,87 @@
+3:08:10 AM: Netlify Build                                                 
+3:08:10 AM: ────────────────────────────────────────────────────────────────
+3:08:10 AM: ​
+3:08:10 AM: ❯ Version
+3:08:10 AM:   @netlify/build 36.0.0
+3:08:10 AM: ​
+3:08:10 AM: ❯ Flags
+3:08:10 AM:   accountId: 67d4c8eaf9585f433b660d7c
+3:08:10 AM:   baseRelDir: true
+3:08:10 AM:   buildId: 6a372b17c5c5a30008b14fa9
+3:08:10 AM:   deployId: 6a372b17c5c5a30008b14fab
+3:08:10 AM: ​
+3:08:10 AM: ❯ Current directory
+3:08:10 AM:   /opt/build/repo
+3:08:10 AM: ​
+3:08:10 AM: ❯ Config file
+3:08:10 AM:   /opt/build/repo/netlify.toml
+3:08:10 AM: ​
+3:08:10 AM: ❯ Context
+3:08:10 AM:   production
+3:08:10 AM: ​
+3:08:10 AM: ❯ Installing extensions
+3:08:10 AM:    - neon
+3:08:24 AM: ​
+3:08:24 AM: ❯ Loading extensions
+3:08:24 AM:    - neon
+3:08:25 AM: ​
+3:08:25 AM: build.command from netlify.toml                               
+3:08:25 AM: ────────────────────────────────────────────────────────────────
+3:08:25 AM: ​
+3:08:25 AM: $ npm ci && npm run build
+3:08:26 AM: npm warn EBADENGINE Unsupported engine {
+3:08:26 AM: npm warn EBADENGINE   package: '@semantic-release/npm@13.1.5',
+3:08:26 AM: npm warn EBADENGINE   required: { node: '^22.14.0 || >= 24.10.0' },
+3:08:26 AM: npm warn EBADENGINE   current: { node: 'v20.20.2', npm: '10.8.2' }
+3:08:26 AM: npm warn EBADENGINE }
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-unicode-property-regex@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-unicode-property-regex instead.
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-export-namespace-from@7.18.9: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-export-namespace-from instead.
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+3:08:36 AM: npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+3:08:36 AM: npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+3:08:36 AM: npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+3:08:36 AM: npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+3:08:36 AM: npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+3:08:36 AM: npm warn deprecated @babel/plugin-proposal-object-rest-spread@7.20.7: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-object-rest-spread instead.
+3:08:39 AM: npm warn deprecated domexception@4.0.0: Use your platform's native DOMException instead
+npm warn deprecated popper.js@1.16.1: You can find the new Popper v2 at @popperjs/core, this package is dedicated to the legacy v1
+3:08:41 AM: npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+3:09:42 AM: Failed during stage 'building site': Build script returned non-zero exit code: 2 (https://ntl.fyi/exit-code-2)
+3:09:41 AM: npm error Exit handler never called!
+3:09:41 AM: npm error This is an error with npm itself. Please report this error at:
+3:09:41 AM: npm error   <https://github.com/npm/cli/issues&gt;
+3:09:41 AM: npm error A complete log of this run can be found in: /opt/buildhome/.npm/_logs/2026-06-21T00_08_25_755Z-debug-0.log
+3:09:41 AM: > trading-bot-template@0.0.1 build
+3:09:41 AM: > rsbuild build
+3:09:41 AM: sh: 1: rsbuild: not found
+3:09:42 AM: ​
+3:09:42 AM: "build.command" failed                                        
+3:09:42 AM: ────────────────────────────────────────────────────────────────
+3:09:42 AM: ​
+3:09:42 AM:   Error message
+3:09:42 AM:   Command failed with exit code 127: npm ci && npm run build (https://ntl.fyi/exit-code-127)
+3:09:42 AM: ​
+3:09:42 AM:   Error location
+3:09:42 AM:   In build.command from netlify.toml:
+3:09:42 AM:   npm ci && npm run build
+3:09:42 AM: ​
+3:09:42 AM:   Resolved config
+3:09:42 AM:   build:
+3:09:42 AM:     command: npm ci && npm run build
+3:09:42 AM:     commandOrigin: config
+3:09:42 AM:     environment:
+3:09:42 AM:       - NODE_VERSION
+3:09:42 AM:     publish: /opt/build/repo/dist
+3:09:42 AM:     publishOrigin: config
+3:09:42 AM:   redirects:
+3:09:42 AM:     - from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
+3:09:42 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+3:09:42 AM: Failing build: Failed to build site
+3:09:42 AM: Finished processing build request in 2m54.366s
