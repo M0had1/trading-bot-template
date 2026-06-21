@@ -1,0 +1,73 @@
+3:45:14 AM: Netlify Build                                                 
+3:45:14 AM: ────────────────────────────────────────────────────────────────
+3:45:14 AM: ​
+3:45:14 AM: ❯ Version
+3:45:14 AM:   @netlify/build 36.0.0
+3:45:14 AM: ​
+3:45:14 AM: ❯ Flags
+3:45:14 AM:   accountId: 67d4c8eaf9585f433b660d7c
+3:45:14 AM:   baseRelDir: true
+3:45:14 AM:   buildId: 6a3733c8c267340008ae1a92
+3:45:14 AM:   deployId: 6a3733c8c267340008ae1a94
+3:45:14 AM: ​
+3:45:14 AM: ❯ Current directory
+3:45:14 AM:   /opt/build/repo
+3:45:14 AM: ​
+3:45:14 AM: ❯ Config file
+3:45:14 AM:   /opt/build/repo/netlify.toml
+3:45:14 AM: ​
+3:45:14 AM: ❯ Context
+3:45:14 AM:   production
+3:45:14 AM: ​
+3:45:14 AM: ❯ Installing extensions
+3:45:14 AM:    - neon
+3:45:29 AM: ​
+3:45:29 AM: ❯ Loading extensions
+3:45:29 AM:    - neon
+3:45:30 AM: ​
+3:45:30 AM: build.command from netlify.toml                               
+3:45:30 AM: ────────────────────────────────────────────────────────────────
+3:45:30 AM: ​
+3:45:30 AM: $ npm install --include=dev --ignore-scripts && npm run build
+3:45:31 AM: npm warn EBADENGINE Unsupported engine {
+3:45:31 AM: npm warn EBADENGINE   package: '@semantic-release/npm@13.1.5',
+3:45:31 AM: npm warn EBADENGINE   required: { node: '^22.14.0 || >= 24.10.0' },
+3:45:31 AM: npm warn EBADENGINE   current: { node: 'v20.20.2', npm: '10.8.2' }
+3:45:31 AM: npm warn EBADENGINE }
+3:45:33 AM: npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+3:45:34 AM: npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+3:46:42 AM: npm error Exit handler never called!
+3:46:42 AM: npm error This is an error with npm itself. Please report this error at:
+3:46:42 AM: npm error   <https://github.com/npm/cli/issues&gt;
+3:46:42 AM: npm error A complete log of this run can be found in: /opt/buildhome/.npm/_logs/2026-06-21T00_45_30_219Z-debug-0.log
+3:46:43 AM: Failed during stage 'building site': Build script returned non-zero exit code: 2 (https://ntl.fyi/exit-code-2)
+3:46:43 AM: > trading-bot-template@0.0.1 build
+3:46:43 AM: > rsbuild build
+3:46:43 AM: sh: 1: rsbuild: not found
+3:46:43 AM: ​
+3:46:43 AM: "build.command" failed                                        
+3:46:43 AM: ────────────────────────────────────────────────────────────────
+3:46:43 AM: ​
+3:46:43 AM:   Error message
+3:46:43 AM:   Command failed with exit code 127: npm install --include=dev --ignore-scripts && npm run build (https://ntl.fyi/exit-code-127)
+3:46:43 AM: ​
+3:46:43 AM:   Error location
+3:46:43 AM:   In build.command from netlify.toml:
+3:46:43 AM:   npm install --include=dev --ignore-scripts && npm run build
+3:46:43 AM: ​
+3:46:43 AM:   Resolved config
+3:46:43 AM:   build:
+3:46:43 AM:     command: npm install --include=dev --ignore-scripts && npm run build
+3:46:43 AM:     commandOrigin: config
+3:46:43 AM:     environment:
+3:46:43 AM:       - NODE_VERSION
+3:46:43 AM:     publish: /opt/build/repo/dist
+3:46:43 AM:     publishOrigin: config
+3:46:43 AM:   redirects:
+3:46:43 AM:     - from: /*
+      status: 200
+      to: /index.html
+  redirectsOrigin: config
+3:46:43 AM: Build failed due to a user error: Build script returned non-zero exit code: 2
+3:46:43 AM: Failing build: Failed to build site
+3:46:44 AM: Finished processing build request in 2m50.574s
