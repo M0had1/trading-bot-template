@@ -1,11 +1,11 @@
 {
-    "brand_name": "YourBrand",
-    "brand_domain": "yourbrand.com",
+    "brand_name": "MOHA",
+    "brand_domain": "ad3z.netlify.app",
     "brand_hostname": {
-        "staging": "staging.yourbrand.com/dashboard",
-        "production": "yourbrand.com/dashboard"
+        "staging": "staging.ad3z.netlify.app/dashboard",
+        "production": "ad3z.netlify.app/dashboard"
     },
-    "domain_name": "YourBrand.com",
+    "domain_name": "MOHA.com",
     "colors": {
         "primary": "#3b82f6",
         "secondary": "#64748b",
@@ -58,14 +58,14 @@
         "css_variable_prefix": "--brand"
     },
     "platform": {
-        "name": "Trading Bot",
+        "name": "MOHA Trading",
         "logo": {
             "type": "component",
             "component_name": "BrandLogo",
-            "alt_text": "Trading Bot",
+            "alt_text": "MOHA Trading",
             "link_url": "/",
             "show_text": false,
-            "text": "Trading Bot"
+            "text": "MOHA Trading"
         },
         "footer": {
             "enable_language_settings": false,
@@ -73,10 +73,10 @@
         },
         "hostname": {
             "production": {
-                "com": "bot.yourbrand.com"
+                "com": "ad3z.netlify.app"
             },
             "staging": {
-                "com": "staging-bot.yourbrand.com"
+                "com": "staging.ad3z.netlify.app"
             }
         },
         "auth2_url": {
@@ -93,5 +93,15 @@
                 "derivatives": "derivatives/"
             }
         }
+    },
+    "auth": {
+        "oauth_redirect_uri_staging": "https://staging.ad3z.netlify.app/dashboard",
+        "oauth_redirect_uri_production": "https://ad3z.netlify.app/dashboard",
+        "oauth_scopes": ["trade", "account_manage"],
+        "oauth_app_id": ""
+    },
+    "app_id": {
+        "staging": "",
+        "production": ""
     }
 }
