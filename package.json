@@ -7,7 +7,8 @@
     },
     "scripts": {
         "start": "rsbuild dev -o",
-        "build": "rsbuild build",
+        "build": "node ./node_modules/@rsbuild/core/bin/rsbuild.js build",
+        "build:rsbuild": "rsbuild build",
         "watch": "rsbuild build --watch",
         "serve": "http-server dist -p 8443 -a localhost -o",
         "start:webpack": "webpack serve --open --config webpack.config.js",
@@ -19,7 +20,8 @@
         "coverage:total": "npm run coverage && node -p \"require('./coverage/coverage-summary.json').total.lines.pct\"",
         "build:analyze": "BUNDLE_ANALYZE=true rsbuild build",
         "generate:brand-css": "node scripts/generate-brand-css.js",
-        "type-check": "tsc --noEmit"
+        "type-check": "tsc --noEmit",
+        "vercel-build": "npm install --legacy-peer-deps && node ./node_modules/@rsbuild/core/bin/rsbuild.js build"
     },
     "dependencies": {
         "@deriv-com/quill-ui": "1.18.1",
