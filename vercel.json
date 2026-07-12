@@ -1,20 +1,9 @@
 {
-  "buildCommand": "node ./node_modules/@rsbuild/core/bin/rsbuild.js build",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "other",
-  "installCommand": "npm install --legacy-peer-deps",
-  "env": {
-    "NODE_ENV": "production",
-    "CLIENT_ID": "@client_id",
-    "APP_ENV": "production"
-  },
-  "envPrefix": "REACT_APP_",
+  "installCommand": "npm install --legacy-peer-deps --no-audit",
   "regions": ["iad1"],
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 60
-    }
-  },
   "redirects": [
     {
       "source": "/:path*",

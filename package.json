@@ -3,11 +3,13 @@
     "private": true,
     "version": "0.0.1",
     "engines": {
-        "node": "20.x"
+        "node": "24.x",
+        "npm": "10.x"
     },
     "scripts": {
         "start": "rsbuild dev -o",
-        "build": "node ./node_modules/@rsbuild/core/bin/rsbuild.js build",
+        "build": "rsbuild build",
+        "build:node": "node ./node_modules/@rsbuild/core/bin/rsbuild.js build",
         "build:rsbuild": "rsbuild build",
         "watch": "rsbuild build --watch",
         "serve": "http-server dist -p 8443 -a localhost -o",
